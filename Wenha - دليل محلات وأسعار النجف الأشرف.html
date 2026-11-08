@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وينها؟ | لا تدوّر هواي... وينها تلقاها!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        emeraldBrand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        goldAccent: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8fafc;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .sponsored-glow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-emeraldBrand-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Logo & Najaf Scope -->
+                <div class="flex items-center gap-3 cursor-pointer shrink-0" onclick="switchView('customer')">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emeraldBrand-800 via-emeraldBrand-600 to-emeraldBrand-500 flex items-center justify-center text-white shadow-lg shadow-emeraldBrand-600/20">
+                        <i data-lucide="search" class="w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl font-black text-slate-900 tracking-tight">وينها<span class="text-emeraldBrand-600">؟</span></span>
+                            <span class="bg-emeraldBrand-100 text-emeraldBrand-800 text-[10px] font-black px-2.5 py-0.5 rounded-full border border-emeraldBrand-200 flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-emeraldBrand-600"></i> النجف الأشرف
+                            </span>
+                        </div>
+                        <span class="text-[11px] text-emeraldBrand-700 font-extrabold block -mt-0.5">لا تدوّر هواي... وينها تلقاها!</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-lg relative">
+                    <i data-lucide="search" class="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="header-search" oninput="handleSearch(this.value)" placeholder="ابحث عن أجهزة، ملابس، أحذية، أدوات منزلية في النجف..." class="w-full pr-12 pl-4 py-3 bg-slate-100 border border-slate-200 rounded-2xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emeraldBrand-600 focus:bg-white transition shadow-inner">
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Shopping Cart Quick Calc Button -->
+                    <button onclick="toggleCartModal()" class="relative p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition flex items-center justify-center">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span id="cart-badge" class="hidden absolute -top-1 -right-1 bg-emeraldBrand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                    </button>
+
+                    <!-- View Switcher (Customer vs Store Owner) -->
+                    <div class="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200">
+                        <button id="mode-btn-customer" onclick="switchView('customer')" class="px-3 py-1.5 rounded-lg text-xs font-black transition bg-white text-emeraldBrand-700 shadow-xs">
+                            <i data-lucide="user" class="w-3.5 h-3.5 inline-block ml-1"></i> الزبائن
+                        </button>
+                        <button id="mode-btn-owner" onclick="switchView('owner')" class="px-3 py-1.5 rounded-lg text-xs font-black text-slate-600 hover:text-slate-900 transition">
+                            <i data-lucide="store" class="w-3.5 h-3.5 inline-block ml-1"></i> أصحاب المحلات
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="md:hidden pb-4">
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" oninput="handleSearch(this.value)" placeholder="ابحث عن أي سلعة في محلات النجف..." class="w-full pr-10 pl-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emeraldBrand-600">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PWA Install Banner -->
+    <div id="install-banner" class="bg-gradient-to-r from-emeraldBrand-800 to-emeraldBrand-600 text-white px-4 py-3 border-b border-emeraldBrand-700 hidden">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <span class="font-black block">ثبّت تطبيق "وينها؟" على هاتفك!</span>
+                    <span class="text-[11px] text-emeraldBrand-100">تصفح أسرع، بدون إنترنت قوي، ودون الحاجة لتنزيل من المتاجر.</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="triggerPWAInstall()" class="bg-white text-emeraldBrand-800 px-3 py-1.5 rounded-xl font-black text-xs hover:bg-emeraldBrand-50 transition shadow-sm">
+                    تثبيت الآن
+                </button>
+                <button onclick="dismissInstallBanner()" class="text-white/80 hover:text-white p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= CUSTOMER VIEW ================= -->
+        <div id="view-customer" class="space-y-7">
+            
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-emeraldBrand-900 via-emeraldBrand-800 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -left-12 -bottom-12 w-64 h-64 bg-emeraldBrand-500/20 rounded-full blur-3xl"></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div class="space-y-3 max-w-2xl">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-goldAccent-500/20 text-goldAccent-400 text-xs font-black px-3 py-1 rounded-full border border-goldAccent-500/30 flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> محرك أسعار النجف الأشرف المباشر
+                            </span>
+                            <span class="bg-white/10 text-slate-200 text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/10">قريباً باقي المحافظات</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-4xl font-black leading-tight">اعرف مكان المحل وسعر السلعة بضغطة واحدة!</h1>
+                        <p class="text-slate-200 text-xs sm:text-sm font-medium">قارن أسعار الهواتف، الملابس، الأحذية والأدوات المنزلية في شارع الروان، الكوفة، الحنانة، شارع المدينة وحي الأمير قبل أن تخرج للمتسوق.</p>
+                    </div>
+                    <button onclick="scrollToProducts()" class="w-full sm:w-auto bg-emeraldBrand-600 hover:bg-emeraldBrand-500 text-white font-black text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-emeraldBrand-900/40 transition flex items-center justify-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> ابدأ التصفح والمقارنة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Area & Category Filters Toolbar -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                <!-- District Selection -->
+                <div>
+                    <label class="block text-xs font-black text-slate-500 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-emeraldBrand-600"></i> تصفية المناطق في النجف الأشرف:
+                    </label>
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar" id="areas-container">
+                        <!-- Dynamic Area Buttons -->
+                    </div>
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Categories Selection -->
+                <div>
+                    <label class="block text-xs font-black text-slate-500 mb-2 flex items-center gap-1.5">
+                        <i data-lucide="grid" class="w-4 h-4 text-emeraldBrand-600"></i> الأقسام الرئيسية:
+                    </label>
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar" id="categories-container">
+                        <!-- Dynamic Categories Buttons -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Banner (Sponsored Stores Banner) -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-sm font-black text-slate-900 flex items-center gap-2">
+                        <i data-lucide="award" class="w-4 h-4 text-goldAccent-500"></i> محلات تجارية مميزة في النجف (رعاة المنصة)
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="sponsored-stores-grid">
+                    <!-- Dynamic Sponsored Stores -->
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div class="space-y-4" id="products-section">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-black text-slate-900 flex items-center gap-2">
+                        <i data-lucide="flame" class="w-5 h-5 text-emeraldBrand-600"></i> المنتجات والأسعار المتاحة اليوم
+                    </h2>
+                    <span class="text-xs text-slate-400 font-bold" id="results-count">0 منتج متوفر</span>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    <!-- Loaded dynamically -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-200 space-y-3">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
+                        <i data-lucide="package-search" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-800">لم نجد سلع تتطابق مع بحثك!</h3>
+                    <p class="text-xs text-slate-400 max-w-sm mx-auto">جرب تغيير الكلمات المفتاحية أو اختر نطاق منطقة أخرى مثل (شارع الروان، الكوفة، حي السلام).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STORE OWNER VIEW ================= -->
+        <div id="view-owner" class="hidden space-y-7">
+            
+            <!-- Owner Header Banner -->
+            <div class="bg-gradient-to-br from-slate-900 via-emeraldBrand-950 to-slate-900 rounded-3xl p-6 text-white shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="bg-emeraldBrand-500/20 text-emeraldBrand-300 text-xs font-black px-3 py-1 rounded-full border border-emeraldBrand-500/30">بوابة التجار والتسويق الرقمي</span>
+                    <h1 class="text-2xl font-black mt-2">انضم إلى قائمة تجار ومحلات النجف</h1>
+                    <p class="text-xs text-slate-300 mt-1">عرض منتجاتك وأسعارك لآلاف الزبائن في محافظة النجف الأشرف وزيادة المبيعات.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <button onclick="openPlansModal()" class="bg-goldAccent-500 hover:bg-goldAccent-600 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md">
+                        <i data-lucide="crown" class="w-4 h-4"></i> باقات الاشتراكات والإعلانات
+                    </button>
+                    <button onclick="openRegisterStoreModal()" class="bg-emeraldBrand-600 hover:bg-emeraldBrand-500 text-white font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-md">
+                        <i data-lucide="store" class="w-4 h-4"></i> تسجيل محل جديد
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stores Management Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Store Select & Info Card -->
+                <div class="lg:col-span-4 bg-white p-5 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
+                    <h3 class="font-black text-sm text-slate-900 flex items-center gap-2">
+                        <i data-lucide="building-2" class="w-4 h-4 text-emeraldBrand-600"></i> إدارة المحل المحدد:
+                    </h3>
+                    
+                    <select id="owner-store-select" onchange="onOwnerStoreChange(this.value)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emeraldBrand-600">
+                        <!-- Loaded dynamically -->
+                    </select>
+
+                    <div id="owner-store-details" class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
+                        <!-- Loaded dynamically -->
+                    </div>
+
+                    <button onclick="openAddProductModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-xs py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-xs">
+                        <i data-lucide="plus-circle" class="w-4 h-4 text-emeraldBrand-500"></i> إضافة منتج جديد لهذا المحل
+                    </button>
+                </div>
+
+                <!-- Store's Active Products List -->
+                <div class="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-200 space-y-4 shadow-xs">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <h3 class="font-black text-sm text-slate-900 flex items-center gap-2">
+                            <i data-lucide="box" class="w-4 h-4 text-emeraldBrand-600"></i> قائمتك المعروضة للزبائن
+                        </h3>
+                        <span id="owner-products-count" class="text-xs bg-slate-100 text-slate-600 font-bold px-2.5 py-1 rounded-full">0 منتج</span>
+                    </div>
+
+                    <div id="owner-products-list" class="space-y-3">
+                        <!-- Dynamic owner items -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Vision & Strategic Goals Banner -->
+    <footer class="bg-slate-900 text-white border-t border-slate-800 mt-12 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-center">
+            <div class="flex items-center justify-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-emeraldBrand-600 flex items-center justify-center text-white">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </div>
+                <span class="text-xl font-black tracking-tight">وينها<span class="text-emeraldBrand-500">؟</span></span>
+            </div>
+            
+            <p class="text-xs sm:text-sm text-slate-300 max-w-2xl mx-auto leading-relaxed font-medium">
+                <strong class="text-emeraldBrand-400">رؤيتنا:</strong> أن يعرف المواطن أين يجد المنتج، وكم سعره، وأين يقع المحل بضغطة واحدة. ينطلق المشروع من المحطة الأولى <span class="text-white font-bold">النجف الأشرف</span> مستهدفين التوسع في كافة محافظات العراق.
+            </p>
+
+            <div class="flex items-center justify-center gap-4 text-xs font-bold text-slate-400 pt-2 border-t border-slate-800">
+                <span>© 2026 تطبيق وينها - العراق</span>
+                <span>•</span>
+                <span class="text-emeraldBrand-400">لا تدوّر هواي... وينها تلقاها!</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: Installation Instructions (iOS / Android guide) -->
+    <div id="modal-install-guide" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-100 bg-slate-900 text-white flex items-center justify-between">
+                <h3 class="font-black text-sm flex items-center gap-2">
+                    <i data-lucide="smartphone" class="w-4 h-4 text-emeraldBrand-500"></i> خطوات تثبيت "وينها؟" على شاشة هاتفك
+                </h3>
+                <button onclick="closeModal('modal-install-guide')" class="text-white/80 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-4 text-xs">
+                
+                <!-- iPhone Section -->
+                <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                    <div class="font-black text-slate-900 flex items-center gap-2 text-sm">
+                        <i data-lucide="apple" class="w-4 h-4 text-slate-700"></i> لمستخدمي آيفون (Safari):
+                    </div>
+                    <ol class="list-decimal list-inside space-y-1 text-slate-600 font-medium">
+                        <li>اضغط على زر <strong>المشاركة (Share)</strong> في أسفل المتصفح.</li>
+                        <li>اختر <strong>"الإضافة إلى الشاشة الرئيسية" (Add to Home Screen)</strong>.</li>
+                        <li>اضغط <strong>إضافة (Add)</strong> وسيعمل كتطبيق كامل.</li>
+                    </ol>
+                </div>
+
+                <!-- Android Section -->
+                <div class="p-3.5 bg-emeraldBrand-50/60 border border-emeraldBrand-200 rounded-2xl space-y-2">
+                    <div class="font-black text-emeraldBrand-900 flex items-center gap-2 text-sm">
+                        <i data-lucide="android" class="w-4 h-4 text-emeraldBrand-700"></i> لمستخدمي أندرويد (Chrome):
+                    </div>
+                    <ol class="list-decimal list-inside space-y-1 text-slate-700 font-medium">
+                        <li>اضغط نقاط خيارات المتصفح <strong>(⋮)</strong> بأعلى الشاشة.</li>
+                        <li>اختر <strong>"تثبيت التطبيق" (Install app)</strong> أو "إضافة لشاشة الهاتف".</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
+                <button onclick="closeModal('modal-install-guide')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-2.5 rounded-xl">فهمت ذلك</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Subscriptions & Profit Plans -->
+    <div id="modal-plans" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-slate-100 bg-slate-900 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="crown" class="w-5 h-5 text-goldAccent-400"></i>
+                    <h3 class="font-black text-sm">باقات اشتراكات المحلات والخدمات التسويقية</h3>
+                </div>
+                <button onclick="closeModal('modal-plans')" class="text-slate-400 hover:text-white p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-3 gap-5">
+                
+                <!-- Free Plan -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black bg-slate-200 text-slate-700 px-2.5 py-1 rounded-full">الباقة المجانية</span>
+                        <h4 class="text-lg font-black text-slate-900">مجاناً</h4>
+                        <p class="text-xs text-slate-500">للمحلات الناشئة والتجربة الأولى في المنصة.</p>
+                        <ul class="text-xs space-y-2 text-slate-700 pt-3 border-t border-slate-200">
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emeraldBrand-600"></i> إضافة محل واحد</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emeraldBrand-600"></i> إضافة حتى 10 منتجات</li>
+                            <li class="flex items-center gap-1.5 text-slate-400"><i data-lucide="x" class="w-4 h-4"></i> بدون شارة التمييز</li>
+                        </ul>
+                    </div>
+                    <button onclick="closeModal('modal-plans'); openRegisterStoreModal();" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-black text-xs py-2.5 rounded-xl transition">ابدأ مجاناً</button>
+                </div>
+
+                <!-- Silver Plan -->
+                <div class="bg-emeraldBrand-50/50 p-5 rounded-2xl border border-emeraldBrand-200 flex flex-col justify-between space-y-4 relative">
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black bg-emeraldBrand-600 text-white px-2.5 py-1 rounded-full">الباقة الفضية</span>
+                        <h4 class="text-lg font-black text-emeraldBrand-900">15,000 <span class="text-xs font-normal">د.ع / شهرياً</span></h4>
+                        <p class="text-xs text-slate-600">للمحلات الراغبة بزيادة انتشارها وحجم سلعها.</p>
+                        <ul class="text-xs space-y-2 text-slate-700 pt-3 border-t border-emeraldBrand-200">
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emeraldBrand-600"></i> إضافة حتى 50 منتج</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emeraldBrand-600"></i> إحصائيات عدد مشاهدات السلع</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-emeraldBrand-600"></i> دعم واتساب مباشر للزبائن</li>
+                        </ul>
+                    </div>
+                    <button onclick="showToast('تم اختيار الباقة الفضية. يرجى التواصل لتفعيل الحساب.'); closeModal('modal-plans');" class="w-full bg-emeraldBrand-600 hover:bg-emeraldBrand-700 text-white font-black text-xs py-2.5 rounded-xl transition">اشترك الآن</button>
+                </div>
+
+                <!-- Gold Plan -->
+                <div class="bg-slate-900 text-white p-5 rounded-2xl border border-goldAccent-500/50 flex flex-col justify-between space-y-4 relative shadow-xl">
+                    <span class="absolute -top-3 right-4 bg-goldAccent-500 text-slate-950 text-[10px] font-black px-3 py-0.5 rounded-full shadow-md">الأكثر مبيعاً</span>
+                    <div class="space-y-2">
+                        <span class="text-[10px] font-black bg-white/10 text-goldAccent-400 px-2.5 py-1 rounded-full">الباقة الذهبية المميزة</span>
+                        <h4 class="text-lg font-black text-white">35,000 <span class="text-xs font-normal text-slate-400">د.ع / شهرياً</span></h4>
+                        <p class="text-xs text-slate-300">لتصدر نتائج البحث في النجف والحصول على الأولوية.</p>
+                        <ul class="text-xs space-y-2 text-slate-200 pt-3 border-t border-slate-800">
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-goldAccent-400"></i> منتجات وأدوات غير محدودة</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-goldAccent-400"></i> ظهور مميز (Sponsored) بأعلى البحث</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-4 h-4 text-goldAccent-400"></i> شارة "محل موصى به" في النجف</li>
+                        </ul>
+                    </div>
+                    <button onclick="showToast('تم اختيار الباقة الذهبية الممتازة. سيتم التفعيل فوراً.'); closeModal('modal-plans');" class="w-full bg-goldAccent-500 hover:bg-goldAccent-600 text-slate-950 font-black text-xs py-2.5 rounded-xl transition">ترقية للباقة الذهبية</button>
+                </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 text-center">
+                <span class="text-xs text-slate-500 font-semibold">هل ترغب بحجز إعلان مدفوع في الواجهة؟ (10,000 د.ع/أسبوعياً) - اتصل بإدارة وينها.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Product Detail & Stores Comparison -->
+    <div id="modal-product-detail" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emeraldBrand-600"></span>
+                    <h3 class="font-black text-slate-900 text-sm" id="detail-modal-title">تفاصيل المنتج ومقارنة أسعار المحلات</h3>
+                </div>
+                <button onclick="closeModal('modal-product-detail')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto space-y-6" id="detail-modal-body">
+                <!-- Dynamic Content -->
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                <button onclick="closeModal('modal-product-detail')" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-xl transition">إغلاق Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Add New Store -->
+    <div id="modal-add-store" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-100 bg-emeraldBrand-700 text-white flex items-center justify-between">
+                <h3 class="font-black text-sm flex items-center gap-2">
+                    <i data-lucide="store" class="w-4 h-4"></i> تسجيل محل تجاري جديد في النجف
+                </h3>
+                <button onclick="closeModal('modal-add-store')" class="text-white/80 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form onsubmit="handleRegisterStore(event)" class="p-5 space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المحل أو المعرض التجاري</label>
+                    <input type="text" id="reg-store-name" required placeholder="مثال: معرض الروان للملابس والأحذية" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">المنطقة في النجف الأشرف</label>
+                    <select id="reg-store-area" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                        <!-- Loaded dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">العنوان بالتفصيل</label>
+                    <input type="text" id="reg-store-address" placeholder="مثال: شارع الروان - مجاور مجمع الروان السكني" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رقم الهاتف / الواتساب</label>
+                    <input type="tel" id="reg-store-phone" required placeholder="0780xxxxxxx" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600 text-right" dir="ltr">
+                </div>
+                <button type="submit" class="w-full bg-emeraldBrand-600 hover:bg-emeraldBrand-700 text-white font-black text-xs py-3 rounded-xl shadow-md transition mt-2">تسجيل المحل الآن</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Add New Product -->
+    <div id="modal-add-product" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-100 bg-slate-900 text-white flex items-center justify-between">
+                <h3 class="font-black text-sm flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4 text-emeraldBrand-500"></i> إضافة سلعة جديدة في وينها؟
+                </h3>
+                <button onclick="closeModal('modal-add-product')" class="text-white/80 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form onsubmit="handleAddProduct(event)" class="p-5 space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المنتج أو السلعة</label>
+                    <input type="text" id="prod-name" required placeholder="مثال: حذاء رياضي Nike أصلـي" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">القسم الرئيسي</label>
+                        <select id="prod-category" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">السعر (د.ع IQD)</label>
+                        <input type="number" id="prod-price" required placeholder="مثال: 45000" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">المحل البائع</label>
+                    <select id="prod-store-id" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رابط صورة السلعة (اختياري)</label>
+                    <input type="url" id="prod-image" placeholder="https://..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emeraldBrand-600">
+                </div>
+                <button type="submit" class="w-full bg-emeraldBrand-600 hover:bg-emeraldBrand-700 text-white font-black text-xs py-3 rounded-xl shadow-md transition mt-2">نشر المنتج في دليل النجف</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Shopping Basket & Budget Calculator -->
+    <div id="modal-cart" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-4 border-b border-slate-100 bg-slate-900 text-white flex items-center justify-between">
+                <h3 class="font-black text-sm flex items-center gap-2">
+                    <i data-lucide="calculator" class="w-4 h-4 text-emeraldBrand-500"></i> حاسبة المسواك والميزانية قبل الخروج
+                </h3>
+                <button onclick="toggleCartModal()" class="text-white/80 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto flex-grow space-y-3" id="cart-items-container">
+                <!-- Cart items list -->
+            </div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 space-y-3">
+                <div class="flex justify-between items-center text-sm font-black text-slate-900">
+                    <span>التكلفة الإجمالية المترقبة:</span>
+                    <span id="cart-total-price" class="text-emeraldBrand-700 text-base">0 د.ع</span>
+                </div>
+                <button onclick="toggleCartModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black text-xs py-3 rounded-xl transition">إغلاق الحاسبة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl hidden transition-all duration-300 flex items-center gap-2 border border-slate-700">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emeraldBrand-400"></i>
+        <span id="toast-text">تمت العملية بنجاح</span>
+    </div>
+
+    <!-- JavaScript Application Engine -->
+    <script>
+        // --- NAJAF LOCATIONS DATA ---
+        const NAJAF_AREAS = [
+            { id: 'all', name: 'كل شوارع النجف' },
+            { id: 'rawan', name: 'شارع الروان' },
+            { id: 'madeena', name: 'شارع المدينة' },
+            { id: 'kufa', name: 'الكوفة' },
+            { id: 'hanana', name: 'حي الحنانة' },
+            { id: 'ameer', name: 'حي الأمير' },
+            { id: 'salam', name: 'حي السلام' },
+            { id: 'rasool', name: 'شارع الرسول' },
+            { id: 'moalemeen', name: 'حي المعلمين' }
+        ];
+
+        // --- MAIN CATEGORIES ---
+        const CATEGORIES = [
+            { id: 'all', name: 'جميع المنتجات', icon: 'grid' },
+            { id: 'electronics', name: 'الهواتف والإلكترونيات', icon: 'smartphone' },
+            { id: 'clothes', name: 'ملابس وأحذية', icon: 'shirt' },
+            { id: 'home', name: 'أدوات منزلية وأجهزة', icon: 'tv' },
+            { id: 'groceries', name: 'مواد غذائية وسوبرماركت', icon: 'shopping-cart' },
+            { id: 'spares', name: 'قطع غيار ومستلزمات عامة', icon: 'wrench' }
+        ];
+
+        // --- STORES DATA (PRE-LOADED NAJAF STORES) ---
+        let stores = [
+            {
+                id: 'st-1',
+                name: 'مركز الروان للتقنيات',
+                areaId: 'rawan',
+                address: 'شارع الروان - مقابل مول النجف',
+                phone: '07801234567',
+                isSponsored: true,
+                rating: 4.9
+            },
+            {
+                id: 'st-2',
+                name: 'معرض السلام للأدوات المنزلية',
+                areaId: 'salam',
+                address: 'حي السلام - الشارع العام',
+                phone: '07819876543',
+                isSponsored: true,
+                rating: 4.8
+            },
+            {
+                id: 'st-3',
+                name: 'بوتيك الحنانة للأزياء والأحذية',
+                areaId: 'hanana',
+                address: 'حي الحنانة - قرب شارع المدارس',
+                phone: '07705554433',
+                isSponsored: true,
+                rating: 4.7
+            },
+            {
+                id: 'st-4',
+                name: 'أسواق المدينة المركزية',
+                areaId: 'madeena',
+                address: 'شارع المدينة - تقاطع الجسر',
+                phone: '07821112233',
+                isSponsored: false,
+                rating: 4.6
+            },
+            {
+                id: 'st-5',
+                name: 'محل الكوفة للهواتف الذكية',
+                areaId: 'kufa',
+                address: 'الكوفة - شارع السفير',
+                phone: '07809998877',
+                isSponsored: false,
+                rating: 4.5
+            }
+        ];
+
+        // --- RICH PRE-LOADED PRODUCTS FOR NAJAF ---
+        let products = [
+            {
+                id: 'pr-1',
+                name: 'iPhone 15 Pro Max (256GB)',
+                categoryId: 'electronics',
+                priceIQD: 1750000,
+                storeId: 'st-1',
+                image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&q=80'
+            },
+            {
+                id: 'pr-2',
+                name: 'iPhone 15 Pro Max (256GB)',
+                categoryId: 'electronics',
+                priceIQD: 1720000,
+                storeId: 'st-5',
+                image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&q=80'
+            },
+            {
+                id: 'pr-3',
+                name: 'حذاء رياضي Nike Air Max أصلـي',
+                categoryId: 'clothes',
+                priceIQD: 65000,
+                storeId: 'st-3',
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80'
+            },
+            {
+                id: 'pr-4',
+                name: 'قميص رجالي رسمي كاجوال',
+                categoryId: 'clothes',
+                priceIQD: 28000,
+                storeId: 'st-3',
+                image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&q=80'
+            },
+            {
+                id: 'pr-5',
+                name: 'طباخ غازي 5 عيون استيل Hafiz',
+                categoryId: 'home',
+                priceIQD: 380000,
+                storeId: 'st-2',
+                image: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80'
+            },
+            {
+                id: 'pr-6',
+                name: 'شاشة حافظ 55 بوصة 4K Smart',
+                categoryId: 'home',
+                priceIQD: 475000,
+                storeId: 'st-2',
+                image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=500&q=80'
+            },
+            {
+                id: 'pr-7',
+                name: 'زيت طعام التونسا 1 لتر',
+                categoryId: 'groceries',
+                priceIQD: 2250,
+                storeId: 'st-4',
+                image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80'
+            },
+            {
+                id: 'pr-8',
+                name: 'حفاضات فاين بيبي حجم 4 (عبوة توفير)',
+                categoryId: 'groceries',
+                priceIQD: 16000,
+                storeId: 'st-4',
+                image: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=500&q=80'
+            }
+        ];
+
+        // --- APP STATE ---
+        let activeArea = 'all';
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let shoppingCart = [];
+        let selectedOwnerStoreId = 'st-1';
+        let deferredPrompt = null;
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAreaButtons();
+            renderCategoryButtons();
+            renderSponsoredStores();
+            renderProducts();
+            renderOwnerPanel();
+            lucide.createIcons();
+
+            // PWA Install Event Catch
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('install-banner').classList.remove('hidden');
+            });
+        });
+
+        function triggerPWAInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        showToast('جاري تثبيت تطبيق وينها على شاشتك الرئيسية...');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('install-banner').classList.add('hidden');
+                });
+            } else {
+                document.getElementById('modal-install-guide').classList.remove('hidden');
+            }
+        }
+
+        function dismissInstallBanner() {
+            document.getElementById('install-banner').classList.add('hidden');
+        }
+
+        function formatIQD(amount) {
+            return amount.toLocaleString('ar-IQ') + ' د.ع';
+        }
+
+        // --- NAVIGATION & VIEWS ---
+        function switchView(mode) {
+            const customerView = document.getElementById('view-customer');
+            const ownerView = document.getElementById('view-owner');
+            const btnCustomer = document.getElementById('mode-btn-customer');
+            const btnOwner = document.getElementById('mode-btn-owner');
+
+            if (mode === 'customer') {
+                customerView.classList.remove('hidden');
+                ownerView.classList.add('hidden');
+                btnCustomer.classList.add('bg-white', 'text-emeraldBrand-700', 'shadow-xs');
+                btnCustomer.classList.remove('text-slate-600');
+                btnOwner.classList.remove('bg-white', 'text-emeraldBrand-700', 'shadow-xs');
+                btnOwner.classList.add('text-slate-600');
+            } else {
+                customerView.classList.add('hidden');
+                ownerView.classList.remove('hidden');
+                btnOwner.classList.add('bg-white', 'text-emeraldBrand-700', 'shadow-xs');
+                btnOwner.classList.remove('text-slate-600');
+                btnCustomer.classList.remove('bg-white', 'text-emeraldBrand-700', 'shadow-xs');
+                btnCustomer.classList.add('text-slate-600');
+                renderOwnerPanel();
+            }
+        }
+
+        // --- RENDER AREA BUTTONS ---
+        function renderAreaButtons() {
+            const container = document.getElementById('areas-container');
+            container.innerHTML = NAJAF_AREAS.map(a => `
+                <button onclick="filterByArea('${a.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition border ${a.id === activeArea ? 'bg-emeraldBrand-600 text-white border-emeraldBrand-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
+                    ${a.name}
+                </button>
+            `).join('');
+        }
+
+        function filterByArea(areaId) {
+            activeArea = areaId;
+            renderAreaButtons();
+            renderProducts();
+        }
+
+        // --- RENDER CATEGORIES BUTTONS ---
+        function renderCategoryButtons() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = CATEGORIES.map(c => `
+                <button onclick="filterByCategory('${c.id}')" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black whitespace-nowrap transition border ${c.id === activeCategory ? 'bg-emeraldBrand-600 text-white border-emeraldBrand-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}">
+                    <i data-lucide="${c.icon}" class="w-3.5 h-3.5"></i>
+                    ${c.name}
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function filterByCategory(catId) {
+            activeCategory = catId;
+            renderCategoryButtons();
+            renderProducts();
+        }
+
+        function handleSearch(query) {
+            searchQuery = query.toLowerCase().trim();
+            renderProducts();
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- RENDER SPONSORED STORES ---
+        function renderSponsoredStores() {
+            const grid = document.getElementById('sponsored-stores-grid');
+            const sponsored = stores.filter(s => s.isSponsored);
+
+            grid.innerHTML = sponsored.map(st => {
+                const area = NAJAF_AREAS.find(a => a.id === st.areaId) || { name: 'النجف' };
+                return `
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 rounded-2xl border border-goldAccent-500/40 shadow-md relative overflow-hidden flex flex-col justify-between">
+                        <span class="absolute top-3 left-3 bg-goldAccent-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-md">برعاية وينها</span>
+                        <div class="space-y-1">
+                            <h3 class="font-black text-sm text-white">${st.name}</h3>
+                            <p class="text-[11px] text-slate-300 flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-emeraldBrand-400"></i> ${area.name} - ${st.address}
+                            </p>
+                        </div>
+                        <div class="pt-3 flex items-center justify-between border-t border-slate-700/60 mt-3">
+                            <span class="text-[10px] text-goldAccent-400 font-bold flex items-center gap-1">
+                                <i data-lucide="star" class="w-3 h-3 fill-goldAccent-400"></i> ${st.rating} تقييم الزبائن
+                            </span>
+                            <a href="tel:${st.phone}" class="bg-emeraldBrand-600 hover:bg-emeraldBrand-500 text-white text-[10px] font-black px-3 py-1 rounded-lg transition">
+                                اتصل الآن
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- FILTER PRODUCTS LOGIC ---
+        function getFilteredProducts() {
+            return products.filter(p => {
+                const store = stores.find(s => s.id === p.storeId);
+                const matchesArea = activeArea === 'all' || (store && store.areaId === activeArea);
+                const matchesCategory = activeCategory === 'all' || p.categoryId === activeCategory;
+                
+                const matchesSearch = !searchQuery || 
+                    p.name.toLowerCase().includes(searchQuery) || 
+                    (store && store.name.toLowerCase().includes(searchQuery));
+
+                return matchesArea && matchesCategory && matchesSearch;
+            });
+        }
+
+        // --- RENDER PRODUCTS GRID ---
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            const filtered = getFilteredProducts();
+            document.getElementById('results-count').innerText = `${filtered.length} منتج متوفر`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('empty-state').classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(item => {
+                const store = stores.find(s => s.id === item.storeId) || { name: 'محل في النجف', address: 'النجف الأشرف' };
+                const areaObj = NAJAF_AREAS.find(a => a.id === store.areaId) || { name: 'النجف' };
+
+                return `
+                <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition duration-300 flex flex-col justify-between group ${store.isSponsored ? 'border-goldAccent-400/60' : ''}">
+                    <div>
+                        <!-- Image & Location Badge -->
+                        <div class="relative h-48 bg-slate-100 overflow-hidden">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x300/f1f5f9/475569?text=صورة+المنتج'">
+                            
+                            <span class="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] font-black px-2.5 py-1 rounded-lg border border-slate-200 shadow-xs flex items-center gap-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-emeraldBrand-600"></i> ${areaObj.name}
+                            </span>
+
+                            ${store.isSponsored ? `
+                                <span class="absolute top-3 left-3 bg-goldAccent-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-md shadow-xs">مميز</span>
+                            ` : ''}
+                        </div>
+
+                        <!-- Content Details -->
+                        <div class="p-4 space-y-2">
+                            <h3 class="font-black text-slate-900 text-sm leading-snug line-clamp-1">${item.name}</h3>
+                            
+                            <div class="flex items-center gap-1 text-[11px] text-slate-500 font-bold">
+                                <i data-lucide="store" class="w-3.5 h-3.5 text-emeraldBrand-600 shrink-0"></i>
+                                <span class="truncate">${store.name}</span>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-100 flex items-baseline justify-between">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block font-bold">السعر في المحل:</span>
+                                    <span class="text-base font-black text-emeraldBrand-700">${formatIQD(item.priceIQD)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer CTAs -->
+                    <div class="p-3 bg-slate-50 border-t border-slate-100 flex items-center gap-2">
+                        <button onclick="openProductDetailModal('${item.id}')" class="flex-1 bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 text-xs font-black py-2 rounded-xl transition flex items-center justify-center gap-1">
+                            <i data-lucide="eye" class="w-3.5 h-3.5 text-emeraldBrand-600"></i> التفاصيل & قارن
+                        </button>
+                        <button onclick="addToCart('${item.id}')" class="p-2 bg-emeraldBrand-50 hover:bg-emeraldBrand-100 text-emeraldBrand-700 rounded-xl transition border border-emeraldBrand-200" title="أضف لحاسبة التسوق">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+
+            lucide.createIcons();
+        }
+
+        // --- PRODUCT DETAIL & COMPARISON MODAL ---
+        function openProductDetailModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const currentStore = stores.find(s => s.id === product.storeId);
+            const similarProducts = products.filter(p => p.name.toLowerCase() === product.name.toLowerCase());
+
+            document.getElementById('detail-modal-title').innerText = product.name;
+            document.getElementById('detail-modal-body').innerHTML = `
+                <div class="flex flex-col sm:flex-row gap-5 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <img src="${product.image}" class="w-28 h-28 object-cover rounded-xl border border-slate-200 shrink-0" onerror="this.src='https://placehold.co/200'">
+                    <div class="space-y-1 text-center sm:text-right w-full">
+                        <span class="text-[10px] font-black text-emeraldBrand-700 bg-emeraldBrand-50 px-2.5 py-0.5 rounded-full border border-emeraldBrand-200">متوفر في النجف الأشرف</span>
+                        <h4 class="text-lg font-black text-slate-900">${product.name}</h4>
+                        <div class="text-xl font-black text-emeraldBrand-600">${formatIQD(product.priceIQD)}</div>
+                    </div>
+                </div>
+
+                <!-- Seller Info -->
+                <div class="space-y-2 border-t border-slate-100 pt-3">
+                    <h5 class="font-bold text-slate-800 text-xs">تفاصيل المحل البائع:</h5>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-slate-900 text-sm">${currentStore ? currentStore.name : 'محل تجاري'}</span>
+                            <span class="text-amber-500 font-bold flex items-center gap-1"><i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400"></i> ${currentStore ? currentStore.rating : '4.8'}</span>
+                        </div>
+                        <p class="text-slate-500 flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> ${currentStore ? currentStore.address : 'النجف'}</p>
+                        
+                        <div class="flex items-center gap-2 pt-2">
+                            <a href="tel:${currentStore ? currentStore.phone : '#'}" class="flex-1 bg-emeraldBrand-600 hover:bg-emeraldBrand-700 text-white text-center text-xs font-black py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+                                <i data-lucide="phone" class="w-3.5 h-3.5"></i> اتصال بالمحل
+                            </a>
+                            <a href="https://wa.me/964${currentStore ? currentStore.phone.substring(1) : ''}" target="_blank" class="flex-1 bg-emeraldBrand-50 text-emeraldBrand-800 border border-emeraldBrand-200 hover:bg-emeraldBrand-100 text-center text-xs font-black py-2.5 rounded-xl transition flex items-center justify-center gap-1">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i> واتساب مباشر
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Comparison -->
+                <div class="space-y-2 border-t border-slate-100 pt-3">
+                    <h5 class="font-bold text-slate-800 text-xs flex items-center justify-between">
+                        <span>مقارنة الأسعار لنفس المنتج بالمحلات الأخرى:</span>
+                        <span class="text-[10px] text-emeraldBrand-600 font-bold">${similarProducts.length} محلات توفرها</span>
+                    </h5>
+                    <div class="space-y-2">
+                        ${similarProducts.map(sp => {
+                            const st = stores.find(s => s.id === sp.storeId);
+                            const area = NAJAF_AREAS.find(a => a.id === (st ? st.areaId : 'all'));
+                            return `
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                                    <div>
+                                        <div class="font-bold text-slate-900">${st ? st.name : 'محل آخر'}</div>
+                                        <div class="text-[10px] text-slate-400">${area ? area.name : 'النجف'} - ${st ? st.address : ''}</div>
+                                    </div>
+                                    <div class="text-left">
+                                        <div class="font-black text-emeraldBrand-700">${formatIQD(sp.priceIQD)}</div>
+                                        <a href="tel:${st ? st.phone : '#'}" class="text-[10px] text-emeraldBrand-600 font-black hover:underline">اتصال بالمحل</a>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modal-product-detail').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        // --- CART CALCULATOR ---
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            shoppingCart.push(product);
+            updateCartBadge();
+            showToast(`تمت إضافة (${product.name}) إلى حاسبة المسواك`);
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = shoppingCart.length;
+            if (shoppingCart.length > 0) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('modal-cart');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                renderCartItems();
+            }
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            if (shoppingCart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-slate-400 space-y-2">
+                        <i data-lucide="shopping-bag" class="w-10 h-10 mx-auto opacity-40"></i>
+                        <p class="text-xs font-bold">سلة التسوق فارغة، اضغط علامة (+) لإضافة سلع وحساب المسواك.</p>
+                    </div>
+                `;
+                document.getElementById('cart-total-price').innerText = '0 د.ع';
+                lucide.createIcons();
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = shoppingCart.map((item, index) => {
+                total += item.priceIQD;
+                return `
+                    <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+                        <div>
+                            <div class="font-bold text-slate-900">${item.name}</div>
+                            <div class="text-[10px] text-slate-400">${formatIQD(item.priceIQD)}</div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-rose-500 hover:text-rose-700 p-1">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('cart-total-price').innerText = formatIQD(total);
+            lucide.createIcons();
+        }
+
+        function removeFromCart(index) {
+            shoppingCart.splice(index, 1);
+            updateCartBadge();
+            renderCartItems();
+        }
+
+        // --- STORE OWNER PANEL ---
+        function renderOwnerPanel() {
+            const select = document.getElementById('owner-store-select');
+            select.innerHTML = stores.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+
+            if (stores.length > 0) {
+                if (!selectedOwnerStoreId || !stores.find(s => s.id === selectedOwnerStoreId)) {
+                    selectedOwnerStoreId = stores[0].id;
+                }
+                select.value = selectedOwnerStoreId;
+                onOwnerStoreChange(selectedOwnerStoreId);
+            }
+        }
+
+        function onOwnerStoreChange(storeId) {
+            selectedOwnerStoreId = storeId;
+            const store = stores.find(s => s.id === storeId);
+            const area = NAJAF_AREAS.find(a => a.id === (store ? store.areaId : 'all'));
+
+            // Store Details
+            const detailsDiv = document.getElementById('owner-store-details');
+            detailsDiv.innerHTML = `
+                <div><strong class="text-slate-700">اسم المحل:</strong> ${store ? store.name : ''}</div>
+                <div><strong class="text-slate-700">المنطقة:</strong> ${area ? area.name : 'النجف'}</div>
+                <div><strong class="text-slate-700">العنوان:</strong> ${store ? store.address : ''}</div>
+                <div><strong class="text-slate-700">الهاتف:</strong> ${store ? store.phone : ''}</div>
+                <div><strong class="text-slate-700">حالة الاشتراك:</strong> <span class="${store && store.isSponsored ? 'text-goldAccent-600 font-bold' : 'text-slate-500'}">${store && store.isSponsored ? 'الباقة الذهبية المميزة (Sponsored)' : 'الباقة المجانية'}</span></div>
+            `;
+
+            // Owner Products Filtered
+            const ownerProducts = products.filter(p => p.storeId === storeId);
+            document.getElementById('owner-products-count').innerText = `${ownerProducts.length} منتج`;
+
+            const listDiv = document.getElementById('owner-products-list');
+            if (ownerProducts.length === 0) {
+                listDiv.innerHTML = `<div class="text-center py-8 text-xs text-slate-400">لم تقم بإضافة منتجات لهذا المحل بعد.</div>`;
+                return;
+            }
+
+            listDiv.innerHTML = ownerProducts.map(p => `
+                <div class="flex items-center justify-between p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs gap-3">
+                    <div class="flex items-center gap-3">
+                        <img src="${p.image}" class="w-12 h-12 rounded-lg object-cover border border-slate-200" onerror="this.src='https://placehold.co/100'">
+                        <div>
+                            <div class="font-extrabold text-slate-900">${p.name}</div>
+                            <div class="font-black text-emeraldBrand-700">${formatIQD(p.priceIQD)}</div>
+                        </div>
+                    </div>
+                    <button onclick="deleteProduct('${p.id}')" class="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition" title="حذف السلعة">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        // --- MODAL CONTROLS & FORMS ---
+        function openPlansModal() {
+            document.getElementById('modal-plans').classList.remove('hidden');
+        }
+
+        function openRegisterStoreModal() {
+            const areaSelect = document.getElementById('reg-store-area');
+            areaSelect.innerHTML = NAJAF_AREAS.filter(a => a.id !== 'all').map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            document.getElementById('modal-add-store').classList.remove('hidden');
+        }
+
+        function handleRegisterStore(e) {
+            e.preventDefault();
+            const newStore = {
+                id: 'st-' + Date.now(),
+                name: document.getElementById('reg-store-name').value,
+                areaId: document.getElementById('reg-store-area').value,
+                address: document.getElementById('reg-store-address').value || 'النجف الأشرف',
+                phone: document.getElementById('reg-store-phone').value,
+                isSponsored: false,
+                rating: 5.0
+            };
+
+            stores.push(newStore);
+            closeModal('modal-add-store');
+            selectedOwnerStoreId = newStore.id;
+            renderOwnerPanel();
+            renderSponsoredStores();
+            showToast(`تم تسجيل المحل (${newStore.name}) بنجاح في تطبيق وينها!`);
+        }
+
+        function openAddProductModal() {
+            const catSelect = document.getElementById('prod-category');
+            catSelect.innerHTML = CATEGORIES.filter(c => c.id !== 'all').map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+            const storeSelect = document.getElementById('prod-store-id');
+            storeSelect.innerHTML = stores.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+
+            document.getElementById('modal-add-product').classList.remove('hidden');
+        }
+
+        function handleAddProduct(e) {
+            e.preventDefault();
+            const newProd = {
+                id: 'pr-' + Date.now(),
+                name: document.getElementById('prod-name').value,
+                categoryId: document.getElementById('prod-category').value,
+                priceIQD: parseFloat(document.getElementById('prod-price').value) || 0,
+                storeId: document.getElementById('prod-store-id').value,
+                image: document.getElementById('prod-image').value || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&q=80'
+            };
+
+            products.unshift(newProd);
+            closeModal('modal-add-product');
+            renderProducts();
+            renderOwnerPanel();
+            showToast(`تم نشر المنتَج (${newProd.name}) بنجاح!`);
+        }
+
+        function deleteProduct(prodId) {
+            products = products.filter(p => p.id !== prodId);
+            renderProducts();
+            renderOwnerPanel();
+            showToast('تم حذف المنتج بنجاح');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
