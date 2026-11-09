@@ -1,8 +1,9 @@
+
 {
-  "name": "وينها",
-  "short_name": "وينها",
+  "name": "Wenha",
+  "short_name": "Wenha",
   "id": "wenha",
-  "description": "دليل محلات وأسعار النجف الأشرف",
+  "description": "Dalil mahalat wa asaar Al-Najaf Al-Ashraf",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "/wenha-app/",
