@@ -1,13 +1,14 @@
 {
-  "name": "وينها - دليل محلات وأسعار النجف الأشرف",
+  "name": "وينها",
   "short_name": "وينها",
-  "description": "دليل محلات وأسعار النجف الأشرف - وينها",
+  "id": "wenha",
+  "description": "دليل محلات وأسعار النجف الأشرف",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "/wenha-app/",
   "scope": "/wenha-app/",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#16a34a",
   "icons": []
